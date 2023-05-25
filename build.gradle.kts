@@ -6,7 +6,6 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	kotlin("jvm") version "1.6.10"
 	kotlin("plugin.spring") version "1.6.10"
-	kotlin("plugin.jpa") version "1.6.10"
 }
 
 group = "com.example"
@@ -32,10 +31,6 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools") // 개발 편리성을 위해 자동으로 저장 후 리로딩해주는 의존성
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-	// mysql
-	implementation("mysql:mysql-connector-java")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 }
 
 tasks.withType<KotlinCompile> {
