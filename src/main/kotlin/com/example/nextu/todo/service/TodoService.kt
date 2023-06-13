@@ -24,4 +24,12 @@ class TodoService(
     fun createTodo(createTodoDTO: TodoDTO.CreateTodoDTO) {
         todoRepository.save(createTodoDTO.toEntity())
     }
+
+    fun checkTodo(todoId: Int) {
+        // todoEntity 가 null 일 경우 ? -> throw exception()
+        val todoEntity = todoRepository.getById(todoId)
+
+        todoEntity.checked = !todoEntity.checked
+        todoRepository.save(todoEntity)
+    }
 }

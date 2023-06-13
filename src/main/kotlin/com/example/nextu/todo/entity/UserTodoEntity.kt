@@ -8,14 +8,13 @@ import javax.persistence.Id
 import javax.persistence.Table
 
 @Entity
-@Table(name = "todo")
-class TodoEntity(
+@Table(name = "user_todo")
+class UserTodoEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int = 0,
-    val title: String,
-    val memo: String?,
-    var checked: Boolean,
+    val userId: Int,
+    val todoId: Int,
     val createdAt: LocalDateTime? = LocalDateTime.now(),
     val updatedAt: LocalDateTime? = LocalDateTime.now()
 )

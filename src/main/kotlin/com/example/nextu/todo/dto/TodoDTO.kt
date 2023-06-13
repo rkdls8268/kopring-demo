@@ -11,7 +11,8 @@ class TodoDTO {
         fun toEntity(): TodoEntity {
             return TodoEntity(
                 title = title,
-                memo = memo
+                memo = memo,
+                checked = false,
             )
         }
     }
