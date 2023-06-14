@@ -19,3 +19,6 @@ spring:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
+jwt:
+  header: Authorization # 데이터 통신 시 헤더 패킷의 이름
+  expiresIn: 3600 # 토큰 만료 시간 - 1 hour

@@ -31,6 +31,16 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools") // 개발 편리성을 위해 자동으로 저장 후 리로딩해주는 의존성
 	annotationProcessor("org.projectlombok:lombok")
+
+	// spring security
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.security:spring-security-test")
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt-api:0.11.1")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.1")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	// mysql
