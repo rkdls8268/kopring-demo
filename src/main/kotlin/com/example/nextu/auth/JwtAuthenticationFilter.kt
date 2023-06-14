@@ -12,8 +12,8 @@ class JwtAuthenticationFilter(
     private val tokenProvider: TokenProvider
 ): GenericFilterBean() {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-        // 헤더에서 JWT 를 받아온다.
-        val token: String? = resolveToken(request as HttpServletRequest)
+        // 헤더에서 JWT 를 받아옴. Bearer 로 시작하므로 앞부분은 날려줘야 함
+        val token: String? = resolveToken(request as HttpServletRequest)?.let { t -> t.split(" ")[1].trim() }
         if (token != null && tokenProvider.validateToken(token)) {
             // 토큰이 유효하면 토큰으로부터 유저 정보를 받아온다.
             val authentication = tokenProvider.getAuthentication(token)
