@@ -1,4 +1,4 @@
-package com.example.nextu.todo.entity
+package com.example.nextu.auth
 
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

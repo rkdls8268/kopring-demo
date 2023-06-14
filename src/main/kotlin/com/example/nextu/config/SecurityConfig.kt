@@ -36,7 +36,8 @@ class SecurityConfig(
             // 토큰이 없는 상태에서 요청이 들어오는 API 들은 permitAll
             .and()
                 .authorizeRequests()
-                .antMatchers("/authenticate").permitAll()
+                .antMatchers("/auth/**").permitAll()
+//                .antMatchers("/api/**").permitAll()
             // JwtFilter를 addFilterBefore로 등록했던 jwtSecurityConfig 클래스 적용
             // 여기서 직접 addFilter 해주거나 config 등록
             .and()

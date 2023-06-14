@@ -1,6 +1,5 @@
 package com.example.nextu.auth
 
-import com.example.nextu.todo.entity.CustomUserDetails
 import com.example.nextu.todo.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
