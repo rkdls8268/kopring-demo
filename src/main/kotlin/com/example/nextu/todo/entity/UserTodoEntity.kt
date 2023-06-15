@@ -1,6 +1,5 @@
 package com.example.nextu.todo.entity
 
-import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -18,6 +17,4 @@ class UserTodoEntity(
     val userId: Int,
     @Column(name = "todo_id")
     val todoId: Int,
-    val createdAt: LocalDateTime? = LocalDateTime.now(),
-    val updatedAt: LocalDateTime? = LocalDateTime.now()
-)
+): BaseTime()

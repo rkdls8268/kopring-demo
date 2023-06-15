@@ -1,6 +1,5 @@
 package com.example.nextu.todo.entity
 
-import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -12,6 +11,4 @@ class UserEntity(
     val email: String,
     val password: String,
     val name: String,
-    val createdAt: LocalDateTime? = LocalDateTime.now(),
-    val updatedAt: LocalDateTime? = LocalDateTime.now()
-)
+): BaseTime()
