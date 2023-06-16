@@ -41,6 +41,11 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.1")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
 
+	// Redis
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+	runtimeOnly("com.h2database:h2")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	// mysql
