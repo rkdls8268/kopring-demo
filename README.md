@@ -1,5 +1,11 @@
 # kotlin & spring boot 연습 페이지
 
+### Checklist
+- [x] spring security & jwt 활용한 인증
+- [x] redis 를 활용하여 refreshToken 정보 저장
+- [ ] JPA
+- [ ] QueryDSL
+
 ### ✏️commit message convention
 | Tag Name | Description                             |
 |----------|-----------------------------------------|
