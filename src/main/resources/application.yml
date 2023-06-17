@@ -25,4 +25,5 @@ spring:
 
 jwt:
   header: Authorization # 데이터 통신 시 헤더 패킷의 이름
-  expiresIn: 3600 # 토큰 만료 시간 - 1 hour
+  accessTokenExpiresIn: 3600 # 토큰 만료 시간 - 1 hour
+  refreshTokenExpiresIn: 86400 # 토큰 만료 시간 - 24 hours

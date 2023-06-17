@@ -1,5 +1,6 @@
 package com.example.nextu.auth
 
+import com.example.nextu.todo.dto.AuthDTO
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
@@ -23,12 +24,15 @@ import javax.crypto.SecretKey
 @Component
 class TokenProvider(
     val userDetailService: CustomUserDetailsService,
-    @Value("\${jwt.expiresIn}")
-    val expiresIn: Long,
+    @Value("\${jwt.accessTokenExpiresIn}")
+    val accessTokenExpiresIn: Long,
+
+    @Value("\${jwt.refreshTokenExpiresIn}")
+    val refreshTokenExpiresIn: Long,
 ) {
     private val key: SecretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256)
 
-    fun createToken(authentication: Authentication): String {
+    fun createToken(authentication: Authentication): AuthDTO.TokenDTO {
         val authorities: String = authentication.authorities.stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","))
@@ -37,15 +41,25 @@ class TokenProvider(
         claims["username"] = authentication.name
 
         val now = Date.from(Instant.now())
-        val time = LocalDateTime.now().plusSeconds(expiresIn)
-        val expiryDate = Date.from(time.atZone(ZoneId.systemDefault()).toInstant())
+        val accessTokenTime = LocalDateTime.now().plusSeconds(accessTokenExpiresIn)
+        val refreshTokenTime = LocalDateTime.now().plusSeconds(refreshTokenExpiresIn)
+        val accessTokenExpiryDate = Date.from(accessTokenTime.atZone(ZoneId.systemDefault()).toInstant())
+        val refreshTokenExpiryDate = Date.from(refreshTokenTime.atZone(ZoneId.systemDefault()).toInstant())
 
-        return Jwts.builder()
-            .setClaims(claims)
-            .setIssuedAt(now)
-            .setExpiration(expiryDate)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact()
+        return AuthDTO.TokenDTO(
+            accessToken = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(accessTokenExpiryDate)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact(),
+            refreshToken = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(refreshTokenExpiryDate)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact()
+        )
     }
 
     fun getAuthentication(token: String): Authentication {
