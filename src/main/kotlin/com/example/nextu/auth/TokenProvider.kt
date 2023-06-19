@@ -46,19 +46,22 @@ class TokenProvider(
         val accessTokenExpiryDate = Date.from(accessTokenTime.atZone(ZoneId.systemDefault()).toInstant())
         val refreshTokenExpiryDate = Date.from(refreshTokenTime.atZone(ZoneId.systemDefault()).toInstant())
 
+        val accessToken = Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(accessTokenExpiryDate)
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact()
+        val refreshToken = Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(refreshTokenExpiryDate)
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact()
+
         return AuthDTO.TokenDTO(
-            accessToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(accessTokenExpiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact(),
-            refreshToken = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(refreshTokenExpiryDate)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact()
+            accessToken = accessToken,
+            refreshToken = refreshToken
         )
     }
 
@@ -93,5 +96,35 @@ class TokenProvider(
         } catch (e: IllegalArgumentException) {
             throw Exception("JWT 토큰이 잘못되었습니다.")
         }
+    }
+
+    fun reissueToken(refreshToken: String): String {
+        val username = Jwts
+            .parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(refreshToken)
+            .body
+            .subject
+        val expiration = Jwts
+            .parserBuilder()
+            .setSigningKey(key)
+            .build()
+            .parseClaimsJws(refreshToken)
+            .body
+            .expiration
+        if (expiration <= Date.from(Instant.now())) throw Exception("refreshToken이 만료되었습니다.")
+
+        val claims = Jwts.claims().setSubject(username)
+        claims["username"] = username
+        val now = Date.from(Instant.now())
+        val accessTokenTime = LocalDateTime.now().plusSeconds(accessTokenExpiresIn)
+        val accessTokenExpiryDate = Date.from(accessTokenTime.atZone(ZoneId.systemDefault()).toInstant())
+        return Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(accessTokenExpiryDate)
+            .signWith(key, SignatureAlgorithm.HS256)
+            .compact()
     }
 }

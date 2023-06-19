@@ -7,6 +7,7 @@ import com.example.nextu.todo.service.AuthService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -35,6 +36,26 @@ class AuthController(
         return AuthDTO.TokenDTO(
             accessToken = token.accessToken,
             refreshToken = token.refreshToken
+        )
+    }
+
+    @PostMapping("/refresh/{userId}")
+    fun refresh(
+        @PathVariable userId: Int,
+    ): AuthDTO.TokenDTO {
+        // userId 로 redis 에서 refreshToken 찾아오기
+        val refreshToken = redisService.getKey("refreshToken")
+        val accessToken: String
+        if (refreshToken != null) {
+            accessToken = tokenProvider.reissueToken(refreshToken as String)
+            val authentication = tokenProvider.getAuthentication(accessToken)
+            SecurityContextHolder.getContext().authentication = authentication
+        } else {
+            throw Exception("refreshToken 이 존재하지 않습니다.")
+        }
+        return AuthDTO.TokenDTO(
+            accessToken = accessToken,
+            refreshToken = refreshToken
         )
     }
 }
