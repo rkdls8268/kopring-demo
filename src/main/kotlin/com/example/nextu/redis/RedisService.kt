@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service
 class RedisService(
     val redisTemplate: RedisTemplate<String, Any>
 ) {
-    // TODO key 에 userId 값 추가
     fun getKey(key: String): Any? {
         val valueOperations = redisTemplate.opsForValue()
         return valueOperations.get(key)

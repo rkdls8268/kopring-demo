@@ -31,7 +31,8 @@ class AuthController(
         SecurityContextHolder.getContext().authentication = authentication
 
         val token = tokenProvider.createToken(authentication)
-        redisService.setKey("refreshToken", token.refreshToken)
+        val userId = authService.getUserId()
+        redisService.setKey("refreshToken:${userId}", token.refreshToken)
 //        authService.saveRefreshToken(1, token.refreshToken)
         return AuthDTO.TokenDTO(
             accessToken = token.accessToken,
@@ -43,8 +44,7 @@ class AuthController(
     fun refresh(
         @PathVariable userId: Int,
     ): AuthDTO.TokenDTO {
-        // userId 로 redis 에서 refreshToken 찾아오기
-        val refreshToken = redisService.getKey("refreshToken")
+        val refreshToken = redisService.getKey("refreshToken:${userId}")
         val accessToken: String
         if (refreshToken != null) {
             accessToken = tokenProvider.reissueToken(refreshToken as String)
