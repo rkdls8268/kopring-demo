@@ -1,6 +1,8 @@
 package com.example.nextu.controller
 
 import com.example.nextu.auth.TokenProvider
+import com.example.nextu.redis.Key
+import com.example.nextu.redis.RedisKey
 import com.example.nextu.redis.RedisService
 import com.example.nextu.todo.dto.AuthDTO
 import com.example.nextu.todo.service.AuthService
@@ -32,7 +34,7 @@ class AuthController(
 
         val token = tokenProvider.createToken(authentication)
         val userId = authService.getUserId()
-        redisService.setKey("refreshToken:${userId}", token.refreshToken)
+        redisService.setKey(RedisKey(Key.REFRESH_TOKEN, userId), token.refreshToken)
 //        authService.saveRefreshToken(1, token.refreshToken)
         return AuthDTO.TokenDTO(
             accessToken = token.accessToken,
