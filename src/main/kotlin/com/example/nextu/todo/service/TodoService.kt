@@ -1,12 +1,18 @@
 package com.example.nextu.todo.service
 
 import com.example.nextu.todo.dto.TodoDTO
+import com.example.nextu.todo.entity.UserTodoEntity
 import com.example.nextu.todo.repository.TodoRepository
+import com.example.nextu.todo.repository.UserRepository
+import com.example.nextu.todo.repository.UserTodoRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class TodoService(
-    private val todoRepository: TodoRepository
+    private val userRepository: UserRepository,
+    private val todoRepository: TodoRepository,
+    private val userTodoRepository: UserTodoRepository,
 ) {
     fun getTodos(): List<TodoDTO.GetTodoDTO> {
         val todoList = todoRepository.findAll()
@@ -21,14 +27,18 @@ class TodoService(
         }
     }
 
-    fun createTodo(createTodoDTO: TodoDTO.CreateTodoDTO) {
-        todoRepository.save(createTodoDTO.toEntity())
+    fun createTodo(userId: Int, createTodoDTO: TodoDTO.CreateTodoDTO) {
+        val user = userRepository.findByIdOrNull(userId) ?: throw Exception("유저가 존재하지 않습니다.")
+        val todo = todoRepository.save(createTodoDTO.toEntity())
+        val userTodo = UserTodoEntity(
+            user = user,
+            todo = todo,
+        )
+        userTodoRepository.save(userTodo)
     }
 
     fun checkTodo(todoId: Int) {
-        // todoEntity 가 null 일 경우 ? -> throw exception()
-        val todoEntity = todoRepository.getById(todoId)
-
+        val todoEntity = todoRepository.findByIdOrNull(todoId) ?: throw Exception("todo 가 존재하지 않습니다.")
         todoEntity.checked = !todoEntity.checked
         todoRepository.save(todoEntity)
     }

@@ -28,7 +28,8 @@ class TodoController(
     fun createTodo(
         @RequestBody createTodoDTO: TodoDTO.CreateTodoDTO
     ) {
-        todoService.createTodo(createTodoDTO)
+        val userId = authService.getUserId()
+        todoService.createTodo(userId,createTodoDTO)
     }
 
     @PatchMapping("/todos/{todoId}/checked")

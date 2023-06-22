@@ -7,6 +7,7 @@ import javax.persistence.*
 class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @OneToMany(mappedBy = "user")
     val id: Int,
     val email: String,
     val password: String,
