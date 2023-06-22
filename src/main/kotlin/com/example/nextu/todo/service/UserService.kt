@@ -8,6 +8,6 @@ class UserService(
     private val userTodoRepository: UserTodoRepository
 ) {
     fun isRightUser(userId: Int, todoId: Int): Boolean {
-        return todoId == userTodoRepository.findOneByUserId(userId).todo.id
+        return userTodoRepository.existsByUserIdAndTodoId(userId, todoId)
     }
 }
