@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface UserTodoRepository: JpaRepository<UserTodoEntity, Int> {
     fun findOneByUserId(userId: Int): UserTodoEntity
+    fun findAllByUserId(userId: Int): List<UserTodoEntity>
 }

@@ -14,8 +14,9 @@ class TodoService(
     private val todoRepository: TodoRepository,
     private val userTodoRepository: UserTodoRepository,
 ) {
-    fun getTodos(): List<TodoDTO.GetTodoDTO> {
-        val todoList = todoRepository.findAll()
+    fun getTodos(userId: Int): List<TodoDTO.GetTodoDTO> {
+        val todoIds = userTodoRepository.findAllByUserId(userId).map { it.id }
+        val todoList = todoRepository.findAllByIdIn(todoIds)
         return todoList.map {
             TodoDTO.GetTodoDTO(
                 id = it.id,

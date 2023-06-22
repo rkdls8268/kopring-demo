@@ -21,7 +21,8 @@ class TodoController(
 ) {
     @GetMapping("/todos")
     fun getTodos(): List<TodoDTO.GetTodoDTO> {
-        return todoService.getTodos()
+        val userId = authService.getUserId()
+        return todoService.getTodos(userId)
     }
 
     @PostMapping("todos")
